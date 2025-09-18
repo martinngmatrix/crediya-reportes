@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.com.bancolombia.sqs.listener.config.SQSProperties;
 import co.com.bancolombia.sqs.listener.dto.LoanApplicationEvent;
+import co.com.bancolombia.sqs.listener.dto.SqsMessageWrapper;
 import co.com.bancolombia.sqs.listener.helper.SQSListener;
 import co.com.bancolombia.usecase.report.ReportUseCase;
 import jakarta.annotation.PostConstruct;
@@ -27,20 +28,26 @@ public class SQSProcessor implements Function<Message, Mono<Void>> {
     private final SQSProperties properties;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // @PostConstruct
-    // public void init() {
-    //     SQSListener.builder()
-    //             .client(client)
-    //             .properties(properties)
-    //             .processor(this)
-    //             .build()
-    //             .start();
-    // }
+    @PostConstruct
+    public void init() {
+        SQSListener.builder()
+                .client(client)
+                .properties(properties)
+                .processor(this)
+                .build()
+                .start();
+    }
 
     @Override
     public Mono<Void> apply(Message message) {
         log.info("Mensaje recibido {}", message.body());
-        return Mono.fromCallable(() -> objectMapper.readValue(message.body(), LoanApplicationEvent.class))
+        return Mono.fromCallable(() -> {
+                SqsMessageWrapper<LoanApplicationEvent> wrapper =
+                        objectMapper.readValue(
+                            message.body(),
+                            objectMapper.getTypeFactory().constructParametricType(SqsMessageWrapper.class, LoanApplicationEvent.class));
+                return wrapper.getPayload();
+            })
                 .flatMap(
                         event -> reportUseCase.updateLoansApplicationReport(event.amount())
                                 .doOnSuccess(unused -> log.info("Reporte actualizado con exito"))

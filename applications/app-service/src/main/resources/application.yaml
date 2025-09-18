@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   application:
     name: "ScaffoldQuickStart"
@@ -57,7 +57,7 @@ entrypoint:
   sqs:
     region: "us-east-1"
     endpoint: "https://sqs.us-east-1.amazonaws.com"
-    queueUrl: "https://sqs.us-east-1.amazonaws.com/571202862746/solicitudes-responses"
+    queueUrl: "https://sqs.us-east-1.amazonaws.com/571202862746/ApprovedLoanApplicationQueue"
     waitTimeSeconds: 20
     maxNumberOfMessages: 10
     visibilityTimeoutSeconds: 10

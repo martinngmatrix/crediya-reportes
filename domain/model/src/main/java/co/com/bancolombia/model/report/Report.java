@@ -6,17 +6,16 @@ import java.math.BigInteger;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-//import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Report {
-    BigInteger Id;
-    String applicationStatus;
-    BigDecimal totalAmount;
-    BigInteger count;
+    private String applicationStatus;
+    private BigDecimal totalAmount;
+    private BigInteger count;
 }

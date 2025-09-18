@@ -10,7 +10,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 @DynamoDbBean
 public class ModelEntity {
 
-    private String id;
     private String applicationStatus;
     private BigInteger count;
     private BigDecimal totalAmount;
@@ -18,23 +17,13 @@ public class ModelEntity {
     public ModelEntity() {
     }
 
-    public ModelEntity(String id, String applicationStatus, BigInteger count, BigDecimal totalAmount) {
-        this.id = id;
+    public ModelEntity(String applicationStatus, BigInteger count, BigDecimal totalAmount) {
         this.applicationStatus = applicationStatus;
         this.count = count;
         this.totalAmount = totalAmount;
     }
 
     @DynamoDbPartitionKey
-    @DynamoDbAttribute("id")
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @DynamoDbAttribute("applicationStatus")
     public String getApplicationStatus() {
         return applicationStatus;
